@@ -40,6 +40,14 @@ body {
   overflow: hidden;
 }
 
+.card:first-child {
+  width: 560px;
+}
+
+.card:last-child {
+  width: 680px;
+}
+
 /* HEADER */
 .header {
   background: var(--blue);
@@ -284,6 +292,26 @@ function calculate() {
     }
   });
 }
+
+function syncDates() {
+  const sy = parseInt(startYear.value);
+  const sm = parseInt(startMonth.value);
+  const ey = parseInt(endYear.value);
+  const em = parseInt(endMonth.value);
+
+  const startTotal = sy * 12 + sm;
+  const endTotal = ey * 12 + em;
+
+  if (endTotal < startTotal) {
+    endYear.value = sy;
+    endMonth.value = sm;
+  }
+}
+
+startYear.addEventListener("change", syncDates);
+startMonth.addEventListener("change", syncDates);
+endYear.addEventListener("change", syncDates);
+endMonth.addEventListener("change", syncDates);
 </script>
 
 </body>
