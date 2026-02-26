@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vehicle Depreciation Calculator</title>
-<link rel="icon" href="favicon.png?v=3">
+<link rel="icon" href="favicon.png?v=6">
 
 <style>
 :root {
@@ -56,9 +56,19 @@ body {
 }
 
 .content {
-  padding: 30px 40px 40px 40px;
+  padding: 25px 40px 40px 40px;
 }
 
+/* SECTION TITLES */
+.section-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--blue);
+  margin: 15px 0 12px 0;
+  letter-spacing: 0.5px;
+}
+
+/* GRID */
 .grid-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -66,36 +76,31 @@ body {
   margin-bottom: 20px;
 }
 
-.rate2-row {
-  margin-bottom: 30px;
-}
-
+/* WRAPPER */
 .select-wrapper {
-  position: relative;
+  display: flex;
+  flex-direction: column;
   width: 100%;
 }
 
 .select-wrapper label {
-  position: absolute;
-  top: -8px;
-  left: 14px;
-  background: white;
-  padding: 0 6px;
-  font-size: 11px;
-  color: #64748b;
+  font-size: 12px;
   font-weight: 600;
+  color: #64748b;
+  margin-bottom: 6px;
 }
 
 .select-wrapper input,
 .select-wrapper select {
   width: 100%;
   box-sizing: border-box;
-  padding: 16px 14px;
+  padding: 14px;
   border-radius: 14px;
   border: 1px solid #dce3f0;
   background: var(--input-bg);
   font-size: 14px;
   box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+  transition: 0.2s;
 }
 
 .select-wrapper input:focus,
@@ -105,12 +110,8 @@ body {
   box-shadow: 0 0 0 3px rgba(10,61,145,0.15);
 }
 
-.section-title {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--blue);
-  margin: 25px 0 15px 0;
-  letter-spacing: 0.5px;
+.rate2-row {
+  margin-bottom: 30px;
 }
 
 button {
@@ -157,7 +158,9 @@ button:hover {
 
   <div class="content">
 
-    <!-- RATE FIELDS -->
+    <!-- RATE SETTINGS -->
+    <div class="section-title">Rate Settings</div>
+
     <div class="grid-2">
       <div class="select-wrapper">
         <label>Monthly Rate 1 (%)</label>
