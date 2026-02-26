@@ -4,14 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vehicle Depreciation Calculator</title>
-<link rel="icon" href="favicon.png?v=6">
+<link rel="icon" href="favicon.png">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 :root {
   --blue: #0A3D91;
   --yellow: #FFD200;
   --bg: #f3f6fb;
-  --input-bg: #ffffff;
 }
 
 body {
@@ -24,6 +25,13 @@ body {
   height: 100vh;
 }
 
+/* LAYOUT */
+.container {
+  display: flex;
+  gap: 40px;
+}
+
+/* CARD */
 .card {
   width: 560px;
   background: white;
@@ -32,6 +40,7 @@ body {
   overflow: hidden;
 }
 
+/* HEADER */
 .header {
   background: var(--blue);
   padding: 22px 35px;
@@ -42,7 +51,6 @@ body {
 
 .header img {
   height: 48px;
-  width: auto;
 }
 
 .header h1 {
@@ -56,19 +64,16 @@ body {
 }
 
 .content {
-  padding: 25px 40px 40px 40px;
+  padding: 30px 40px 40px 40px;
 }
 
-/* SECTION TITLES */
 .section-title {
   font-size: 13px;
   font-weight: 700;
   color: var(--blue);
   margin: 15px 0 12px 0;
-  letter-spacing: 0.5px;
 }
 
-/* GRID */
 .grid-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -76,42 +81,24 @@ body {
   margin-bottom: 20px;
 }
 
-/* WRAPPER */
 .select-wrapper {
   display: flex;
   flex-direction: column;
-  width: 100%;
 }
 
 .select-wrapper label {
   font-size: 12px;
   font-weight: 600;
-  color: #64748b;
   margin-bottom: 6px;
+  color: #64748b;
 }
 
 .select-wrapper input,
 .select-wrapper select {
-  width: 100%;
-  box-sizing: border-box;
   padding: 14px;
   border-radius: 14px;
   border: 1px solid #dce3f0;
-  background: var(--input-bg);
   font-size: 14px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.04);
-  transition: 0.2s;
-}
-
-.select-wrapper input:focus,
-.select-wrapper select:focus {
-  outline: none;
-  border-color: var(--blue);
-  box-shadow: 0 0 0 3px rgba(10,61,145,0.15);
-}
-
-.rate2-row {
-  margin-bottom: 30px;
 }
 
 button {
@@ -124,100 +111,112 @@ button {
   font-weight: 700;
   font-size: 15px;
   cursor: pointer;
-  transition: 0.2s;
-  margin-top: 10px;
-}
-
-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
 }
 
 .result {
-  margin-top: 25px;
-  padding: 24px;
+  margin-top: 20px;
+  padding: 20px;
   border-radius: 18px;
-  background: linear-gradient(145deg, #eef2f8, #f6f9ff);
+  background: #f3f6fb;
   text-align: center;
   font-weight: 600;
   color: var(--blue);
-  font-size: 16px;
-  box-shadow: inset 0 2px 6px rgba(0,0,0,0.05);
+}
+
+/* CHART CARD */
+.chart-container {
+  padding: 40px;
+  height: 100%;
+}
+
+canvas {
+  max-width: 100%;
 }
 </style>
 </head>
 
 <body>
 
-<div class="card">
+<div class="container">
 
-  <div class="header">
-    <img src="logo.jpeg" alt="Logo">
-    <h1>Vehicle Depreciation Calculator</h1>
+  <!-- CALCULATOR -->
+  <div class="card">
+    <div class="header">
+      <img src="logo.jpeg">
+      <h1>Vehicle Depreciation Calculator</h1>
+    </div>
+
+    <div class="content">
+
+      <div class="section-title">Rate Settings</div>
+
+      <div class="grid-2">
+        <div class="select-wrapper">
+          <label>Monthly Rate 1 (%)</label>
+          <input type="number" id="rate1" value="0.5" step="0.01">
+        </div>
+        <div class="select-wrapper">
+          <label>Years with Rate 1</label>
+          <input type="number" id="years1" value="3">
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="select-wrapper">
+          <label>Monthly Rate 2 (%)</label>
+          <input type="number" id="rate2" value="0.3" step="0.01">
+        </div>
+        <div></div>
+      </div>
+
+      <div class="section-title">Date Range</div>
+
+      <div class="grid-2">
+        <div class="select-wrapper">
+          <label>Start Year</label>
+          <select id="startYear"></select>
+        </div>
+        <div class="select-wrapper">
+          <label>Start Month</label>
+          <select id="startMonth"></select>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="select-wrapper">
+          <label>End Year</label>
+          <select id="endYear"></select>
+        </div>
+        <div class="select-wrapper">
+          <label>End Month</label>
+          <select id="endMonth"></select>
+        </div>
+      </div>
+
+      <button onclick="calculate()">Calculate</button>
+
+      <div class="result" id="output">
+        Select dates to calculate depreciation.
+      </div>
+
+    </div>
   </div>
 
-  <div class="content">
-
-    <!-- RATE SETTINGS -->
-    <div class="section-title">Rate Settings</div>
-
-    <div class="grid-2">
-      <div class="select-wrapper">
-        <label>Monthly Rate 1 (%)</label>
-        <input type="number" id="rate1" value="0.5" step="0.01">
-      </div>
-
-      <div class="select-wrapper">
-        <label>Years with Rate 1</label>
-        <input type="number" id="years1" value="3">
-      </div>
+  <!-- CHART -->
+  <div class="card">
+    <div class="header">
+      <h1 style="position:static; transform:none;">Depreciation Chart</h1>
     </div>
-
-    <div class="grid-2 rate2-row">
-      <div class="select-wrapper">
-        <label>Monthly Rate 2 (%)</label>
-        <input type="number" id="rate2" value="0.3" step="0.01">
-      </div>
-      <div></div>
+    <div class="chart-container">
+      <canvas id="chart"></canvas>
     </div>
-
-    <!-- DATE RANGE -->
-    <div class="section-title">Date Range</div>
-
-    <div class="grid-2">
-      <div class="select-wrapper">
-        <label>Start Year</label>
-        <select id="startYear"></select>
-      </div>
-
-      <div class="select-wrapper">
-        <label>Start Month</label>
-        <select id="startMonth"></select>
-      </div>
-    </div>
-
-    <div class="grid-2">
-      <div class="select-wrapper">
-        <label>End Year</label>
-        <select id="endYear"></select>
-      </div>
-
-      <div class="select-wrapper">
-        <label>End Month</label>
-        <select id="endMonth"></select>
-      </div>
-    </div>
-
-    <button onclick="calculate()">Calculate</button>
-
-    <div class="result" id="output">
-      Select dates to calculate depreciation.
-    </div>
-
   </div>
+
 </div>
 
 <script>
+let chart;
+
 const startYear = document.getElementById("startYear");
 const endYear = document.getElementById("endYear");
 const startMonth = document.getElementById("startMonth");
@@ -228,11 +227,7 @@ for (let y = 2000; y <= 2040; y++) {
   endYear.innerHTML += `<option value="${y}">${y}</option>`;
 }
 
-const months = [
-  "January","February","March","April","May","June",
-  "July","August","September","October","November","December"
-];
-
+const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 months.forEach((m, i) => {
   startMonth.innerHTML += `<option value="${i}">${m}</option>`;
   endMonth.innerHTML += `<option value="${i}">${m}</option>`;
@@ -253,28 +248,41 @@ function calculate() {
 
   const monthsRate1 = years1 * 12;
 
-  let remaining;
+  let values = [];
+  let current = 1;
 
-  if (totalMonths <= monthsRate1) {
-    remaining = Math.pow(1 - rate1, totalMonths);
-  } else {
-    const phase1 = Math.pow(1 - rate1, monthsRate1);
-    const remainingMonths = totalMonths - monthsRate1;
-    const phase2 = Math.pow(1 - rate2, remainingMonths);
-    remaining = phase1 * phase2;
+  for (let i = 0; i <= totalMonths; i++) {
+    if (i <= monthsRate1) {
+      current *= (1 - rate1);
+    } else {
+      current *= (1 - rate2);
+    }
+    values.push((current * 100).toFixed(2));
   }
 
-  const remainingPercent = remaining * 100;
-  const depreciationPercent = 100 - remainingPercent;
+  document.getElementById("output").innerHTML =
+    `Remaining Value: ${values[values.length-1]}%`;
 
-  document.getElementById("output").innerHTML = `
-    <div style="font-size:18px; margin-bottom:8px;">
-      Remaining Value: <strong>${remainingPercent.toFixed(2)}%</strong>
-    </div>
-    <div style="font-size:15px; opacity:0.8;">
-      Total Depreciation: ${depreciationPercent.toFixed(2)}%
-    </div>
-  `;
+  if (chart) chart.destroy();
+
+  chart = new Chart(document.getElementById("chart"), {
+    type: "line",
+    data: {
+      labels: values.map((_, i) => i),
+      datasets: [{
+        label: "Remaining Value (%)",
+        data: values,
+        borderColor: "#0A3D91",
+        backgroundColor: "rgba(10,61,145,0.1)",
+        fill: true,
+        tension: 0.3
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } }
+    }
+  });
 }
 </script>
 
