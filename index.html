@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vehicle Depreciation Calculator</title>
-<link rel="icon" href="favicon.png">
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -21,90 +20,76 @@ body {
   background: var(--bg);
   display: flex;
   justify-content: center;
-  padding: 60px 0;
+  align-items: center;
+  height: 100vh;
 }
 
-/* LAYOUT */
 .container {
   display: flex;
-  gap: 40px;
-  align-items: center; /* <-- EZ igazítja középre */
+  gap: 60px;
+  align-items: center;
 }
 
-/* CARD */
 .card {
-  width: 560px;
   background: white;
   border-radius: 24px;
   box-shadow: 0 30px 70px rgba(0,0,0,0.08);
   overflow: hidden;
 }
 
-.card:first-child {
-  width: 560px;
-}
+.card-calculator { width: 560px; }
+.card-chart { width: 760px; }
 
-.card:last-child {
-  width: 680px;
-}
-
-/* HEADER */
 .header {
   background: var(--blue);
   padding: 22px 35px;
-  position: relative;
   display: flex;
   align-items: center;
 }
 
 .header img {
   height: 48px;
+  margin-right: 20px;
 }
 
 .header h1 {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
   color: white;
   font-size: 18px;
   font-weight: 600;
-  margin: 0;
+  margin: 0 auto;
 }
 
 .content {
-  padding: 30px 40px 40px 40px;
+  padding: 40px;
 }
 
 .section-title {
-  font-size: 13px;
-  font-weight: 700;
+  font-weight: 600;
   color: var(--blue);
-  margin: 15px 0 12px 0;
+  margin-bottom: 15px;
+  margin-top: 10px;
 }
 
 .grid-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 24px;
-  margin-bottom: 20px;
+  gap: 20px;
 }
 
-.select-wrapper {
+.input-group {
   display: flex;
   flex-direction: column;
 }
 
-.select-wrapper label {
+.input-group label {
   font-size: 12px;
-  font-weight: 600;
   margin-bottom: 6px;
-  color: #64748b;
+  color: #555;
 }
 
-.select-wrapper input,
-.select-wrapper select {
+input, select {
   padding: 14px;
-  border-radius: 14px;
+  border-radius: 12px;
   border: 1px solid #dce3f0;
   font-size: 14px;
 }
@@ -119,29 +104,22 @@ button {
   font-weight: 700;
   font-size: 15px;
   cursor: pointer;
+  margin-top: 25px;
 }
 
 .result {
-  margin-top: 20px;
+  margin-top: 25px;
   padding: 20px;
   border-radius: 18px;
-  background: #f3f6fb;
+  background: #eef2f8;
   text-align: center;
   font-weight: 600;
   color: var(--blue);
 }
 
-/* CHART */
-.chart-container {
-  padding: 40px;
-  height: 420px; /* fix box magasság */
-  display: flex;
-  align-items: center;
-}
-
-canvas {
-  width: 100% !important;
-  height: 100% !important; /* Chart.js kezeli, nem torzít */
+.chart-wrapper {
+  padding: 30px;
+  height: 500px;
 }
 </style>
 </head>
@@ -151,9 +129,9 @@ canvas {
 <div class="container">
 
   <!-- CALCULATOR -->
-  <div class="card">
+  <div class="card card-calculator">
     <div class="header">
-      <img src="logo.jpeg">
+      <img src="logo.jpeg" alt="Logo">
       <h1>Vehicle Depreciation Calculator</h1>
     </div>
 
@@ -162,43 +140,41 @@ canvas {
       <div class="section-title">Rate Settings</div>
 
       <div class="grid-2">
-        <div class="select-wrapper">
+        <div class="input-group">
           <label>Monthly Rate 1 (%)</label>
           <input type="number" id="rate1" value="0.5" step="0.01">
         </div>
-        <div class="select-wrapper">
+
+        <div class="input-group">
           <label>Years with Rate 1</label>
           <input type="number" id="years1" value="3">
         </div>
       </div>
 
-      <div class="grid-2">
-        <div class="select-wrapper">
-          <label>Monthly Rate 2 (%)</label>
-          <input type="number" id="rate2" value="0.3" step="0.01">
-        </div>
-        <div></div>
+      <div class="input-group" style="margin-top:20px;">
+        <label>Monthly Rate 2 (%)</label>
+        <input type="number" id="rate2" value="0.3" step="0.01">
       </div>
 
-      <div class="section-title">Date Range</div>
+      <div class="section-title" style="margin-top:30px;">Date Range</div>
 
       <div class="grid-2">
-        <div class="select-wrapper">
+        <div class="input-group">
           <label>Start Year</label>
           <select id="startYear"></select>
         </div>
-        <div class="select-wrapper">
+
+        <div class="input-group">
           <label>Start Month</label>
           <select id="startMonth"></select>
         </div>
-      </div>
 
-      <div class="grid-2">
-        <div class="select-wrapper">
+        <div class="input-group">
           <label>End Year</label>
           <select id="endYear"></select>
         </div>
-        <div class="select-wrapper">
+
+        <div class="input-group">
           <label>End Month</label>
           <select id="endMonth"></select>
         </div>
@@ -214,11 +190,11 @@ canvas {
   </div>
 
   <!-- CHART -->
-  <div class="card">
+  <div class="card card-chart">
     <div class="header">
-      <h1 style="position:static; transform:none;">Depreciation Chart</h1>
+      <h1>Depreciation Chart</h1>
     </div>
-    <div class="chart-container">
+    <div class="chart-wrapper">
       <canvas id="chart"></canvas>
     </div>
   </div>
@@ -226,8 +202,8 @@ canvas {
 </div>
 
 <script>
-let chart;
 
+// Populate years & months
 const startYear = document.getElementById("startYear");
 const endYear = document.getElementById("endYear");
 const startMonth = document.getElementById("startMonth");
@@ -239,61 +215,37 @@ for (let y = 2000; y <= 2040; y++) {
 }
 
 const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-months.forEach((m, i) => {
+
+months.forEach((m,i)=>{
   startMonth.innerHTML += `<option value="${i}">${m}</option>`;
   endMonth.innerHTML += `<option value="${i}">${m}</option>`;
 });
 
-function calculate() {
-  const sy = parseInt(startYear.value);
-  const sm = parseInt(startMonth.value);
-  const ey = parseInt(endYear.value);
-  const em = parseInt(endMonth.value);
-
-  const totalMonths = (ey - sy) * 12 + (em - sm);
-  if (totalMonths < 0) return;
-
-  const rate1 = parseFloat(document.getElementById("rate1").value) / 100;
-  const years1 = parseInt(document.getElementById("years1").value);
-  const rate2 = parseFloat(document.getElementById("rate2").value) / 100;
-
-  const monthsRate1 = years1 * 12;
-
-  let values = [];
-  let current = 1;
-
-  for (let i = 0; i <= totalMonths; i++) {
-    if (i <= monthsRate1) current *= (1 - rate1);
-    else current *= (1 - rate2);
-    values.push((current * 100).toFixed(2));
-  }
-
-  document.getElementById("output").innerHTML =
-    `Remaining Value: ${values[values.length-1]}%`;
-
-  if (chart) chart.destroy();
-
-  chart = new Chart(document.getElementById("chart"), {
-    type: "line",
-    data: {
-      labels: values.map((_, i) => i),
-      datasets: [{
-        data: values,
-        borderColor: "#0A3D91",
-        backgroundColor: "rgba(10,61,145,0.15)",
-        fill: true,
-        tension: 0.3
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: { legend: { display: false } }
+// Chart init (empty)
+let chart = new Chart(document.getElementById("chart"), {
+  type: "line",
+  data: {
+    labels: [],
+    datasets: [{
+      data: [],
+      borderColor: "#0A3D91",
+      backgroundColor: "rgba(10,61,145,0.15)",
+      fill: true,
+      tension: 0.3
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { min: 0, max: 100 }
     }
-  });
-}
+  }
+});
 
-function syncDates() {
+function calculate() {
+
   const sy = parseInt(startYear.value);
   const sm = parseInt(startMonth.value);
   const ey = parseInt(endYear.value);
@@ -303,15 +255,41 @@ function syncDates() {
   const endTotal = ey * 12 + em;
 
   if (endTotal < startTotal) {
-    endYear.value = sy;
-    endMonth.value = sm;
+    alert("End date cannot be earlier than start date.");
+    return;
   }
+
+  const totalMonths = endTotal - startTotal;
+
+  const rate1 = parseFloat(document.getElementById("rate1").value) / 100;
+  const years1 = parseInt(document.getElementById("years1").value);
+  const rate2 = parseFloat(document.getElementById("rate2").value) / 100;
+
+  const monthsRate1 = years1 * 12;
+
+  let values = [];
+  let labels = [];
+  let current = 1;
+
+  for (let i = 0; i <= totalMonths; i++) {
+
+    if (i <= monthsRate1)
+      current *= (1 - rate1);
+    else
+      current *= (1 - rate2);
+
+    values.push((current * 100).toFixed(2));
+    labels.push(i);
+  }
+
+  document.getElementById("output").innerHTML =
+    `Remaining Value: ${values[values.length - 1]}%`;
+
+  chart.data.labels = labels;
+  chart.data.datasets[0].data = values;
+  chart.update();
 }
 
-startYear.addEventListener("change", syncDates);
-startMonth.addEventListener("change", syncDates);
-endYear.addEventListener("change", syncDates);
-endMonth.addEventListener("change", syncDates);
 </script>
 
 </body>
