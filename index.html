@@ -3,13 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DAT Depreciation Calculator</title>
+<title>Vehicle Depreciation Calculator</title>
 
 <style>
 :root {
   --brand-blue: #0A3D91;
   --brand-yellow: #FFD200;
   --background: #f4f6fa;
+  --light-gray: #e2e8f0;
 }
 
 body {
@@ -25,25 +26,30 @@ body {
 /* Card */
 .card {
   background: #ffffff;
-  width: 480px;
-  border-radius: 18px;
-  box-shadow:
-    0 20px 60px rgba(10, 61, 145, 0.15),
-    0 8px 20px rgba(0, 0, 0, 0.05);
+  width: 520px;
+  border-radius: 20px;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.08);
   overflow: hidden;
-  transition: 0.3s ease;
 }
-
 
 /* Header */
 .header {
   background: var(--brand-blue);
-  padding: 20px;
-  text-align: center;
+  color: white;
+  padding: 18px 30px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
 }
 
 .header img {
-  height: 70px;
+  height: 50px;
+}
+
+.header h1 {
+  font-size: 18px;
+  margin: 0;
+  font-weight: 600;
 }
 
 /* Content */
@@ -51,28 +57,39 @@ body {
   padding: 35px;
 }
 
-h1 {
-  font-size: 20px;
-  margin-bottom: 25px;
-  color: var(--brand-blue);
-  text-align: center;
+/* Grid layout */
+.row {
+  display: flex;
+  gap: 15px;
+}
+
+.field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 label {
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
-  color: #334155;
+  color: #475569;
+  margin-bottom: 6px;
 }
 
+/* Modern Select */
 select {
-  width: 100%;
-  padding: 10px;
-  margin: 8px 0 18px 0;
-  border-radius: 10px;
-  border: 1px solid #dbe2ef;
-  font-size: 14px;
+  appearance: none;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid var(--light-gray);
   background: #f8fafc;
+  font-size: 14px;
   transition: 0.2s;
+  cursor: pointer;
+}
+
+select:hover {
+  border-color: var(--brand-blue);
 }
 
 select:focus {
@@ -81,13 +98,15 @@ select:focus {
   box-shadow: 0 0 0 3px rgba(10,61,145,0.15);
 }
 
+/* Button */
 button {
   width: 100%;
-  padding: 12px;
+  padding: 14px;
+  margin-top: 25px;
   background: var(--brand-yellow);
   color: var(--brand-blue);
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
   font-weight: 600;
   font-size: 15px;
   cursor: pointer;
@@ -96,19 +115,18 @@ button {
 
 button:hover {
   background: #f4c400;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
 }
 
+/* Result */
 .result {
   margin-top: 25px;
-  padding: 18px;
+  padding: 20px;
   background: #f1f5f9;
-  border-radius: 12px;
+  border-radius: 14px;
   text-align: center;
-  font-size: 15px;
+  font-size: 16px;
+  font-weight: 600;
   color: var(--brand-blue);
-  box-shadow: inset 0 2px 6px rgba(0,0,0,0.05);
 }
 </style>
 </head>
@@ -116,30 +134,42 @@ button:hover {
 <body>
 
 <div class="card">
+
   <div class="header">
-    <img src="assets/logo.jpeg" alt="DAT Logo">
+    <img src="logo.jpeg" alt="DAT Logo">
+    <h1>Vehicle Depreciation Calculator</h1>
   </div>
 
   <div class="content">
-    <h1>Vehicle Depreciation Calculator</h1>
 
-    <label>Start Year</label>
-    <select id="startYear"></select>
+    <div class="row">
+      <div class="field">
+        <label>Start Year</label>
+        <select id="startYear"></select>
+      </div>
+      <div class="field">
+        <label>Start Month</label>
+        <select id="startMonth"></select>
+      </div>
+    </div>
 
-    <label>Start Month</label>
-    <select id="startMonth"></select>
-
-    <label>End Year</label>
-    <select id="endYear"></select>
-
-    <label>End Month</label>
-    <select id="endMonth"></select>
+    <div class="row">
+      <div class="field">
+        <label>End Year</label>
+        <select id="endYear"></select>
+      </div>
+      <div class="field">
+        <label>End Month</label>
+        <select id="endMonth"></select>
+      </div>
+    </div>
 
     <button onclick="calculate()">Calculate</button>
 
     <div class="result" id="output">
       Select dates to calculate depreciation.
     </div>
+
   </div>
 </div>
 
@@ -183,7 +213,7 @@ function calculate() {
   const depreciation = 100 - remaining;
 
   document.getElementById("output").innerHTML =
-    `<strong>Total Depreciation:</strong> ${depreciation.toFixed(2)}%`;
+    `Total Depreciation: ${depreciation.toFixed(2)}%`;
 }
 </script>
 
