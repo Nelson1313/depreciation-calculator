@@ -56,30 +56,23 @@ body {
 }
 
 .content {
-  padding: 40px;
-}
-
-.section-title {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--blue);
-  margin: 30px 0 15px 0;
-  letter-spacing: 0.5px;
+  padding: 30px 40px 40px 40px;
 }
 
 .grid-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  margin-bottom: 15px;
+  gap: 24px;
+  margin-bottom: 20px;
 }
 
 .rate2-row {
-  margin-bottom: 40px;
+  margin-bottom: 30px;
 }
 
 .select-wrapper {
   position: relative;
+  width: 100%;
 }
 
 .select-wrapper label {
@@ -93,9 +86,10 @@ body {
   font-weight: 600;
 }
 
-.select-wrapper select,
-.select-wrapper input {
+.select-wrapper input,
+.select-wrapper select {
   width: 100%;
+  box-sizing: border-box;
   padding: 16px 14px;
   border-radius: 14px;
   border: 1px solid #dce3f0;
@@ -104,11 +98,19 @@ body {
   box-shadow: 0 4px 10px rgba(0,0,0,0.04);
 }
 
-.select-wrapper select:focus,
-.select-wrapper input:focus {
+.select-wrapper input:focus,
+.select-wrapper select:focus {
   outline: none;
   border-color: var(--blue);
   box-shadow: 0 0 0 3px rgba(10,61,145,0.15);
+}
+
+.section-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--blue);
+  margin: 25px 0 15px 0;
+  letter-spacing: 0.5px;
 }
 
 button {
@@ -155,9 +157,7 @@ button:hover {
 
   <div class="content">
 
-    <!-- RATE SETTINGS -->
-    <h3 class="section-title">Rate Settings</h3>
-
+    <!-- RATE FIELDS -->
     <div class="grid-2">
       <div class="select-wrapper">
         <label>Monthly Rate 1 (%)</label>
@@ -179,7 +179,7 @@ button:hover {
     </div>
 
     <!-- DATE RANGE -->
-    <h3 class="section-title">Date Range</h3>
+    <div class="section-title">Date Range</div>
 
     <div class="grid-2">
       <div class="select-wrapper">
