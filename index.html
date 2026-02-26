@@ -21,14 +21,14 @@ body {
   background: var(--bg);
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  padding-top: 60px;
+  padding: 60px 0;
 }
 
 /* LAYOUT */
 .container {
   display: flex;
   gap: 40px;
+  align-items: center; /* <-- EZ igazítja középre */
 }
 
 /* CARD */
@@ -38,7 +38,6 @@ body {
   border-radius: 24px;
   box-shadow: 0 30px 70px rgba(0,0,0,0.08);
   overflow: hidden;
-  height: auto;
 }
 
 /* HEADER */
@@ -126,12 +125,15 @@ button {
 
 /* CHART */
 .chart-container {
-  padding: 30px 40px 40px 40px;
+  padding: 40px;
+  height: 420px; /* fix box magasság */
+  display: flex;
+  align-items: center;
 }
 
 canvas {
-  max-width: 100%;
-  height: 280px !important;
+  width: 100% !important;
+  height: 100% !important; /* Chart.js kezeli, nem torzít */
 }
 </style>
 </head>
@@ -253,11 +255,8 @@ function calculate() {
   let current = 1;
 
   for (let i = 0; i <= totalMonths; i++) {
-    if (i <= monthsRate1) {
-      current *= (1 - rate1);
-    } else {
-      current *= (1 - rate2);
-    }
+    if (i <= monthsRate1) current *= (1 - rate1);
+    else current *= (1 - rate2);
     values.push((current * 100).toFixed(2));
   }
 
@@ -273,14 +272,15 @@ function calculate() {
       datasets: [{
         data: values,
         borderColor: "#0A3D91",
-        backgroundColor: "rgba(10,61,145,0.1)",
+        backgroundColor: "rgba(10,61,145,0.15)",
         fill: true,
         tension: 0.3
       }]
     },
     options: {
-      plugins: { legend: { display: false } },
-      responsive: true
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } }
     }
   });
 }
