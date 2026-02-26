@@ -21,8 +21,8 @@ body {
   background: var(--bg);
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 100vh;
+  align-items: flex-start;   /* <-- FONTOS */
+  padding-top: 60px;         /* felső margó */
 }
 
 /* LAYOUT */
@@ -38,6 +38,7 @@ body {
   border-radius: 24px;
   box-shadow: 0 30px 70px rgba(0,0,0,0.08);
   overflow: hidden;
+  height: auto;
 }
 
 /* HEADER */
@@ -125,12 +126,12 @@ button {
 
 /* CHART CARD */
 .chart-container {
-  padding: 40px;
-  height: 100%;
+  padding: 30px 40px 40px 40px;
 }
 
 canvas {
   max-width: 100%;
+  height: 280px !important;  /* fix, kompakt méret */
 }
 </style>
 </head>
