@@ -7,16 +7,16 @@
 
 <style>
 :root {
-  --brand-blue: #0A3D91;
-  --brand-yellow: #FFD200;
-  --background: #f4f6fa;
-  --light-gray: #e2e8f0;
+  --blue: #0A3D91;
+  --yellow: #FFD200;
+  --bg: #f3f6fb;
+  --input-bg: #ffffff;
 }
 
 body {
   margin: 0;
-  font-family: "Segoe UI", Arial, sans-serif;
-  background: var(--background);
+  font-family: "Segoe UI", sans-serif;
+  background: var(--bg);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -25,108 +25,121 @@ body {
 
 /* Card */
 .card {
-  background: #ffffff;
-  width: 520px;
-  border-radius: 20px;
-  box-shadow: 0 25px 60px rgba(0,0,0,0.08);
+  width: 540px;
+  background: white;
+  border-radius: 24px;
+  box-shadow: 0 30px 70px rgba(0,0,0,0.08);
   overflow: hidden;
 }
 
 /* Header */
 .header {
-  background: var(--brand-blue);
-  color: white;
-  padding: 18px 30px;
+  background: var(--blue);
+  padding: 22px 35px;
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 20px;
 }
 
 .header img {
-  height: 50px;
+  height: 48px;
 }
 
 .header h1 {
+  color: white;
   font-size: 18px;
-  margin: 0;
   font-weight: 600;
+  margin: 0;
 }
 
 /* Content */
 .content {
-  padding: 35px;
+  padding: 40px;
 }
 
-/* Grid layout */
-.row {
-  display: flex;
-  gap: 15px;
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+  margin-bottom: 25px;
 }
 
-.field {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
+/* Floating Select */
+.select-wrapper {
+  position: relative;
 }
 
-label {
-  font-size: 12px;
+.select-wrapper label {
+  position: absolute;
+  top: -8px;
+  left: 14px;
+  background: white;
+  padding: 0 6px;
+  font-size: 11px;
+  color: #64748b;
   font-weight: 600;
-  color: #475569;
-  margin-bottom: 6px;
 }
 
-/* Modern Select */
-select {
-  appearance: none;
-  padding: 12px;
-  border-radius: 12px;
-  border: 1px solid var(--light-gray);
-  background: #f8fafc;
+.select-wrapper select {
+  width: 100%;
+  padding: 16px 14px;
+  border-radius: 14px;
+  border: 1px solid #dce3f0;
+  background: var(--input-bg);
   font-size: 14px;
-  transition: 0.2s;
+  appearance: none;
   cursor: pointer;
+  transition: 0.2s;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.04);
 }
 
-select:hover {
-  border-color: var(--brand-blue);
-}
-
-select:focus {
+.select-wrapper select:focus {
   outline: none;
-  border-color: var(--brand-blue);
+  border-color: var(--blue);
   box-shadow: 0 0 0 3px rgba(10,61,145,0.15);
+}
+
+/* Custom arrow */
+.select-wrapper::after {
+  content: "▾";
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--blue);
+  pointer-events: none;
+  font-size: 14px;
 }
 
 /* Button */
 button {
   width: 100%;
-  padding: 14px;
-  margin-top: 25px;
-  background: var(--brand-yellow);
-  color: var(--brand-blue);
+  padding: 16px;
+  border-radius: 14px;
   border: none;
-  border-radius: 12px;
-  font-weight: 600;
+  background: var(--yellow);
+  color: var(--blue);
+  font-weight: 700;
   font-size: 15px;
   cursor: pointer;
   transition: 0.2s;
 }
 
 button:hover {
-  background: #f4c400;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
 }
 
 /* Result */
 .result {
   margin-top: 25px;
   padding: 20px;
-  background: #f1f5f9;
-  border-radius: 14px;
+  border-radius: 16px;
+  background: #eef2f8;
   text-align: center;
-  font-size: 16px;
   font-weight: 600;
-  color: var(--brand-blue);
+  color: var(--blue);
+  font-size: 16px;
 }
 </style>
 </head>
@@ -136,29 +149,29 @@ button:hover {
 <div class="card">
 
   <div class="header">
-    <img src="logo.jpeg" alt="DAT Logo">
+    <img src="./logo.jpeg" alt="DAT Logo">
     <h1>Vehicle Depreciation Calculator</h1>
   </div>
 
   <div class="content">
 
-    <div class="row">
-      <div class="field">
+    <div class="grid">
+      <div class="select-wrapper">
         <label>Start Year</label>
         <select id="startYear"></select>
       </div>
-      <div class="field">
+
+      <div class="select-wrapper">
         <label>Start Month</label>
         <select id="startMonth"></select>
       </div>
-    </div>
 
-    <div class="row">
-      <div class="field">
+      <div class="select-wrapper">
         <label>End Year</label>
         <select id="endYear"></select>
       </div>
-      <div class="field">
+
+      <div class="select-wrapper">
         <label>End Month</label>
         <select id="endMonth"></select>
       </div>
@@ -209,8 +222,7 @@ function calculate() {
   }
 
   const monthlyRate = 0.005;
-  const remaining = Math.pow(1 - monthlyRate, totalMonths) * 100;
-  const depreciation = 100 - remaining;
+  const depreciation = 100 - (Math.pow(1 - monthlyRate, totalMonths) * 100);
 
   document.getElementById("output").innerHTML =
     `Total Depreciation: ${depreciation.toFixed(2)}%`;
