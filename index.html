@@ -75,6 +75,16 @@ body {
   position: relative;
 }
 
+.select-wrapper input {
+  width: 100%;
+  padding: 16px 14px;
+  border-radius: 14px;
+  border: 1px solid #dce3f0;
+  background: var(--input-bg);
+  font-size: 14px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+}
+
 .select-wrapper label {
   position: absolute;
   top: -8px;
@@ -164,6 +174,20 @@ button:hover {
 
     <div class="grid">
       <div class="select-wrapper">
+    <label>Monthly Rate 1 (%)</label>
+    <input type="number" id="rate1" value="0.5" step="0.01">
+  </div>
+
+  <div class="select-wrapper">
+    <label>Years with Rate 1</label>
+    <input type="number" id="years1" value="3">
+  </div>
+
+  <div class="select-wrapper">
+    <label>Monthly Rate 2 (%)</label>
+    <input type="number" id="rate2" value="0.3" step="0.01">
+  </div>
+      <div class="select-wrapper">
         <label>Start Year</label>
         <select id="startYear"></select>
       </div>
@@ -241,18 +265,34 @@ function calculate() {
   const em = parseInt(endMonth.value);
 
   const totalMonths = (ey - sy) * 12 + (em - sm);
+  if (totalMonths < 0) return;
 
-  const monthlyRate = 0.005; // 0.5%
+  const rate1 = parseFloat(document.getElementById("rate1").value) / 100;
+  const years1 = parseInt(document.getElementById("years1").value);
+  const rate2 = parseFloat(document.getElementById("rate2").value) / 100;
 
-  const remainingValue = Math.pow(1 - monthlyRate, totalMonths) * 100;
-  const depreciation = 100 - remainingValue;
+  const monthsRate1 = years1 * 12;
+
+  let remaining = 1;
+
+  if (totalMonths <= monthsRate1) {
+    remaining = Math.pow(1 - rate1, totalMonths);
+  } else {
+    const remainingAfterPhase1 = Math.pow(1 - rate1, monthsRate1);
+    const remainingMonths = totalMonths - monthsRate1;
+    const remainingAfterPhase2 = Math.pow(1 - rate2, remainingMonths);
+    remaining = remainingAfterPhase1 * remainingAfterPhase2;
+  }
+
+  const remainingPercent = remaining * 100;
+  const depreciationPercent = 100 - remainingPercent;
 
   document.getElementById("output").innerHTML = `
     <div style="font-size:18px; margin-bottom:8px;">
-      Remaining Value: <strong>${remainingValue.toFixed(2)}%</strong>
+      Remaining Value: <strong>${remainingPercent.toFixed(2)}%</strong>
     </div>
     <div style="font-size:15px; opacity:0.8;">
-      Total Depreciation: ${depreciation.toFixed(2)}%
+      Total Depreciation: ${depreciationPercent.toFixed(2)}%
     </div>
   `;
 }
