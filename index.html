@@ -34,12 +34,6 @@ body {
   transition: 0.3s ease;
 }
 
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow:
-    0 30px 70px rgba(10, 61, 145, 0.18),
-    0 12px 30px rgba(0, 0, 0, 0.08);
-}
 
 /* Header */
 .header {
@@ -123,7 +117,7 @@ button:hover {
 
 <div class="card">
   <div class="header">
-    <img src="assets/logo.png" alt="DAT Logo">
+    <img src="assets/logo.jpeg" alt="DAT Logo">
   </div>
 
   <div class="content">
@@ -189,8 +183,7 @@ function calculate() {
   const depreciation = 100 - remaining;
 
   document.getElementById("output").innerHTML =
-    `<strong>Remaining Value:</strong> ${remaining.toFixed(2)}%<br>
-     <strong>Total Depreciation:</strong> ${depreciation.toFixed(2)}%`;
+    `<strong>Total Depreciation:</strong> ${depreciation.toFixed(2)}%`;
 }
 </script>
 
