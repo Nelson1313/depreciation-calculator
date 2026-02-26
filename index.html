@@ -34,18 +34,23 @@ body {
 
 /* Header */
 .header {
-  background: var(--blue);
+ background: var(--blue);
   padding: 22px 35px;
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 20px;
 }
 
 .header img {
   height: 48px;
+  position: relative;
+  z-index: 2;
 }
 
 .header h1 {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   color: white;
   font-size: 18px;
   font-weight: 600;
@@ -207,6 +212,26 @@ months.forEach((m, i) => {
   endMonth.innerHTML += `<option value="${i}">${m}</option>`;
 });
 
+function syncDates() {
+  const sy = parseInt(startYear.value);
+  const sm = parseInt(startMonth.value);
+  const ey = parseInt(endYear.value);
+  const em = parseInt(endMonth.value);
+
+  const startTotal = sy * 12 + sm;
+  const endTotal = ey * 12 + em;
+
+  if (endTotal < startTotal) {
+    endYear.value = sy;
+    endMonth.value = sm;
+  }
+}
+
+startYear.addEventListener("change", syncDates);
+startMonth.addEventListener("change", syncDates);
+endYear.addEventListener("change", syncDates);
+endMonth.addEventListener("change", syncDates);
+
 function calculate() {
   const sy = parseInt(startYear.value);
   const sm = parseInt(startMonth.value);
@@ -214,12 +239,6 @@ function calculate() {
   const em = parseInt(endMonth.value);
 
   const totalMonths = (ey - sy) * 12 + (em - sm);
-
-  if (totalMonths < 0) {
-    document.getElementById("output").innerHTML =
-      "End date must be later than start date.";
-    return;
-  }
 
   const monthlyRate = 0.005;
   const depreciation = 100 - (Math.pow(1 - monthlyRate, totalMonths) * 100);
