@@ -209,7 +209,7 @@ const endYear = document.getElementById("endYear");
 const startMonth = document.getElementById("startMonth");
 const endMonth = document.getElementById("endMonth");
 
-for (let y = 2000; y <= 2040; y++) {
+for (let y = 2040; y >= 2000; y--) {
   startYear.innerHTML += `<option value="${y}">${y}</option>`;
   endYear.innerHTML += `<option value="${y}">${y}</option>`;
 }
@@ -220,6 +220,13 @@ months.forEach((m,i)=>{
   startMonth.innerHTML += `<option value="${i}">${m}</option>`;
   endMonth.innerHTML += `<option value="${i}">${m}</option>`;
 });
+
+const today = new Date();
+const currentYear = today.getFullYear();
+const currentMonth = today.getMonth();
+
+endYear.value = currentYear;
+endMonth.value = currentMonth;
 
 // Chart init (empty)
 let chart = new Chart(document.getElementById("chart"), {
